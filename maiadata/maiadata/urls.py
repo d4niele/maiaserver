@@ -15,7 +15,48 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import url, include
+from rest_framework import routers, serializers, viewsets
+from rest_framework.views import APIView
+
+from main.models import Data
+
+admin.site.site_header = 'MAIA SERVER ADMIN'
+admin.site.site_title = admin.site.site_header
+
+
+class DataSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Data
+        fields = ('espid', 'topic', 'timestamp', 'peso','temperatura','umidita')
+
+#class DataViewSet(viewsets.ModelViewSet):
+#    queryset = Data.objects.all()
+#    serializer_class = DataSerializer
+#router = routers.DefaultRouter()
+#router.register(r'records', DataViewSet)
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+class DataView(APIView):
+    def get(self, request):
+        data = Data.objects.all()
+        return Response({"records": data})
+#    queryset = Data.objects.all()
+#    serializer_class = DataSerializer
+    def post(self, request, format=None):
+        print(request.data)
+        serializer = DataSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('records/', DataView.as_view()),
+#    url(r'^', include(router.urls)),
+#    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
+
+#curl -X POST H "Authorization: JWT token" http://localhost:8000/records/ '{"key":"val"}'
