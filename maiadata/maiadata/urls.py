@@ -14,11 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+import json
 from django.urls import path
 from django.conf.urls import url, include
 from rest_framework import routers, serializers, viewsets
 from rest_framework.views import APIView
-
+from rest_framework.response import Response
 from main.models import Data
 
 admin.site.site_header = 'MAIA SERVER ADMIN'
@@ -30,33 +31,48 @@ class DataSerializer(serializers.HyperlinkedModelSerializer):
         model = Data
         fields = ('espid', 'topic', 'timestamp', 'peso','temperatura','umidita')
 
-#class DataViewSet(viewsets.ModelViewSet):
-#    queryset = Data.objects.all()
-#    serializer_class = DataSerializer
-#router = routers.DefaultRouter()
-#router.register(r'records', DataViewSet)
-from rest_framework.views import APIView
-from rest_framework.response import Response
+class DataViewSet(viewsets.ModelViewSet):
+    queryset = Data.objects.all()
+    serializer_class = DataSerializer   
+    def create(self, request): # Here is the new update comes <<<<
+        post_data = request.data
+        v = json.loads(list(post_data.dict().keys())[0])
+        #post_data.save()
+        # do something with post data
+        data = Data()
+        for x in v:
+            setattr(data,x,v[x])
+            print()
+        data.save()
+         #data.save()
+        return Response(data="return data")
 
-class DataView(APIView):
-    def get(self, request):
-        data = Data.objects.all()
-        return Response({"records": data})
+router = routers.DefaultRouter()
+router.register(r'records', DataViewSet)
+#from rest_framework.views import APIView
+#from rest_framework.response import Response#
+
+#class DataView(APIView):
+#    def get(self, request):
+#        data = Data.objects.all()
+#        serializer =DataSerializer(data) 
+#       return Response({"records": data})
+#        return Response({'records':serializer.data})
 #    queryset = Data.objects.all()
 #    serializer_class = DataSerializer
-    def post(self, request, format=None):
-        print(request.data)
-        serializer = DataSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def post(self, request, format=None):
+    #     print(request.data)
+    #     serializer = DataSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('records/', DataView.as_view()),
-#    url(r'^', include(router.urls)),
-#    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    #path('records/', DataView.as_view()),
+    url(r'^', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 
 #curl -X POST H "Authorization: JWT token" http://localhost:8000/records/ '{"key":"val"}'
