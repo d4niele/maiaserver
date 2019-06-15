@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 import time,json,requests
+URL = 'http://localhost:8000/records/'
 
 def on_message(client, userdata, message):
     m = message.payload.decode("utf-8")
@@ -10,7 +11,7 @@ def on_message(client, userdata, message):
     m_dict = json.loads(m)
     m_dict['topic'] = t
     print(json.dumps(m_dict))
-    r = requests.post('http://localhost:8000/records/', data = json.dumps(m_dict),headers = {'content-type':'application/json'})
+    r = requests.post(URL, data = json.dumps(m_dict),headers = {'content-type':'application/json'})
 
 
 
@@ -21,7 +22,7 @@ client.on_message=on_message
 client.connect(broker_address,1883) 
 client.loop_start() 
 client.subscribe("/maia/2")
-
+client.subscribe("/maia/3")
 while True:
     time.sleep(1)
 
