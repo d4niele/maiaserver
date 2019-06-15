@@ -7,10 +7,10 @@ def on_message(client, userdata, message):
     t = message.topic
     qos = message.qos
     retain_flag = message.retain
-    print("message received " ,message.payload.decode("utf-8"))
+    #print("message received " ,message.payload.decode("utf-8"))
     m_dict = json.loads(m)
     m_dict['topic'] = t
-    print(json.dumps(m_dict))
+    #print(json.dumps(m_dict))
     r = requests.post(URL, data = json.dumps(m_dict),headers = {'content-type':'application/json'})
 
 
