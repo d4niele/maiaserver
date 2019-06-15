@@ -4,4 +4,7 @@ from .models import Data
 
 @admin.register(Data)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('espid', 'topic','timestamp','peso','temperatura','umidita')
+    def has_add_permission(self, request, obj=None):
+        return False
+    
+    list_display = ('espid','timereg', 'topic','timestamp','peso','temperatura','umidita')

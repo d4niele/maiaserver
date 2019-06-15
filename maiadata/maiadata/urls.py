@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-import json
+import json,datetime
 from django.urls import path
 from django.conf.urls import url, include
 from rest_framework import routers, serializers, viewsets
@@ -34,17 +34,18 @@ class DataSerializer(serializers.HyperlinkedModelSerializer):
 class DataViewSet(viewsets.ModelViewSet):
     queryset = Data.objects.all()
     serializer_class = DataSerializer   
-    def create(self, request): # Here is the new update comes <<<<
+    def create(self, request): 
         post_data = request.data
-        v = json.loads(list(post_data.dict().keys())[0])
+        print(post_data,type(post_data))
+        #v = json.loads(list(post_data.dict().keys())[0])
+        v = post_data
         #post_data.save()
         # do something with post data
         data = Data()
         for x in v:
             setattr(data,x,v[x])
-            print()
+        data.timereg = datetime.datetime.now()
         data.save()
-         #data.save()
         return Response(data="return data")
 
 router = routers.DefaultRouter()
