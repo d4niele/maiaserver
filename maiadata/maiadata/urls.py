@@ -14,7 +14,7 @@ admin.site.site_title = admin.site.site_header
 class DataSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Data
-        fields = ('espid', 'topic', 'timestamp', 'peso','temperatura','umidita')
+        fields = ('timereg','espid', 'topic', 'timestamp', 'peso','temperatura','umidita')
 
 class DataViewSet(viewsets.ModelViewSet):
     queryset = Data.objects.all()
