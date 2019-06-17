@@ -18,7 +18,7 @@ class DataSerializer(serializers.HyperlinkedModelSerializer):
 
 class DataViewSet(viewsets.ModelViewSet):
     queryset = Data.objects.all()
-    serializer_class = DataSerializer   
+    serializer_class = DataSerializer
     def create(self, request): 
         post_data = request.data
         v = post_data
@@ -29,8 +29,15 @@ class DataViewSet(viewsets.ModelViewSet):
         data.save()
         return Response('OK')
 
+
+class DataViewSet2(viewsets.ModelViewSet):
+    queryset = Data.objects.filter(espid='Ascea')[:1000]
+    serializer_class = DataSerializer
+
+
 router = routers.DefaultRouter()
 router.register(r'records', DataViewSet)
+router.register(r'records_ascea', DataViewSet2)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
