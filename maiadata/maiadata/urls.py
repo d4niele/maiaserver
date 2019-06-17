@@ -31,7 +31,7 @@ class DataViewSet(viewsets.ModelViewSet):
 
 
 class DataViewSet2(viewsets.ModelViewSet):
-    queryset = Data.objects.filter(espid='Ascea')[-1000:]
+    queryset = Data.objects.filter(espid='Ascea')#[-1000:]
     serializer_class = DataSerializer
 
 
