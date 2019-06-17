@@ -8,27 +8,42 @@
     $(document).ready(function(){
         var ctx = document.getElementById('myChart').getContext('2d');
         var url = '/records_ascea/';
-        console.log("date");
+        //console.log("date");
         $.getJSON( url, function( data ) {
             var date = [];
-            var temp = [];
-            console.log(data);
+            var temperatura = [];
+            var peso = [];
+            var umidita = [];
+            //console.log(data);
             $.each( data, function( key, val ) {
                 date.push(val.timereg);
-                temp.push(val.temperatura);
+                temperatura.push(val.temperatura);
+                peso.push(val.peso);
+                umidita.push(val.umidita);
             });
-            //console.log(date);
-            //console.log(temp);
             var chart = new Chart(ctx, {
             type: 'line',
             data: {
             labels: date,
             datasets: [{
-                label: 'temp',
+                label: 'temperatura',
                 //backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
-                data: temp,
-            }]
+                data: temperatura,
+                },
+                {
+                label: 'peso',
+                //backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 255, 0)',
+                data: peso,
+                },
+                {
+                label: 'umidita',
+                //backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(0, 255, 0)',
+                data: umidita,
+                },
+            ]
             },
             options: {}
             });
