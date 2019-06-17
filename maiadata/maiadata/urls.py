@@ -6,7 +6,7 @@ from rest_framework import routers, serializers, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from main.models import Data
-
+from main.views import charts
 admin.site.site_header = 'MAIA SERVER ADMIN'
 admin.site.site_title = admin.site.site_header
 
@@ -40,6 +40,7 @@ router.register(r'records', DataViewSet)
 router.register(r'records_ascea', DataViewSet2)
 
 urlpatterns = [
+    url(r'charts/', charts),
     path('admin/', admin.site.urls),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
