@@ -40,7 +40,7 @@ router.register(r'records', DataViewSet)
 router.register(r'records_ascea', DataViewSet2)
 
 urlpatterns = [
-    url(r'charts/<slug:espid>', charts),
+    path(r'charts/<slug:espid>', charts),
     path('admin/', admin.site.urls),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
