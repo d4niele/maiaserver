@@ -34,10 +34,15 @@ class DataViewSet2(viewsets.ModelViewSet):
     queryset = Data.objects.filter(espid='Ascea')#[-1000:]
     serializer_class = DataSerializer
 
+class DataViewSet3(viewsets.ModelViewSet):
+    queryset = Data.objects.filter(espid='Prato')#[-1000:]
+    serializer_class = DataSerializer
+
 
 router = routers.DefaultRouter()
 router.register(r'records', DataViewSet)
 router.register(r'records_ascea', DataViewSet2)
+router.register(r'records_prato', DataViewSet3)
 
 urlpatterns = [
     path(r'charts/<slug:espid>', charts),
