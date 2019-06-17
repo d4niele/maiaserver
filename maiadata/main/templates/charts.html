@@ -1,0 +1,41 @@
+<html>
+<head>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var url = '/records_ascea/';
+        console.log("date");
+        $.getJSON( url, function( data ) {
+            var date = [];
+            var temp = [];
+            console.log(data);
+            $.each( data, function( key, val ) {
+                date.push(val.timereg);
+                temp.push(val.temperatura);
+            });
+            //console.log(date);
+            //console.log(temp);
+            var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+            labels: date,
+            datasets: [{
+                label: 'temp',
+                //backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: temp,
+            }]
+            },
+            options: {}
+            });
+        });
+    });
+    
+    </script>
+    <canvas id="myChart"></canvas>
+</body>
+</html>
